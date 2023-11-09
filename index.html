@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorando Web Components em JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="WebComponents.js" defer></script>
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
+</head>
+
+<body>
+    <my-header>
+        <a href="#">Link Exemplo 1</a>
+        <a href="#">Link Exemplo 2</a>
+    </my-header>
+    <section>
+        <h1>Explorando Web Components em JavaScript</h1>
+
+        <h2>O que são Web Components?</h2>
+        <p>Web Components são uma abordagem eficiente para criar elementos reutilizáveis em uma aplicação, como botões, cabeçalhos e interfaces. Essa técnica permite o reaproveitamento dessas estruturas em diferentes páginas ou projetos.</p>
+        
+        <h2>Shadow DOM:</h2>
+        <p>O Shadow DOM é uma extensão do DOM (Document Object Model) convencional. Ambos possuem estruturas de árvore e ramificações, mas o Shadow DOM é encapsulado em seu próprio ambiente. Isso significa que ele não é facilmente modificado nem afeta o ambiente externo, a menos que essa intenção seja explicitamente declarada.</p>
+        
+        <h2>Definindo nossa classe:</h2>
+        <p>Para criar uma classe de Web Component, fazemos uma herança do HTMLElement para obter funcionalidades e atributos internos. Após criar o construtor com atributos e métodos, usamos o <code>customElements.define</code> para criar uma nova tag HTML, especificando o nome e a classe utilizada.</p>
+        <pre><code class="language-javascript">class SimpleExample extends HTMLElement {
+        constructor() {
+            super(); // Herança da classe
+            const shadow = this.attachShadow({ mode: 'open' }); // Definindo nosso Shadow DOM
+            const style = document.createElement('style');
+            style.textContent = `
+            div {
+                width: 150px;
+                height: 150px;
+                background-color: blue;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            p {
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                color: lemonchiffon;
+            }
+            `;
+            const div = document.createElement('div');
+            const text = document.createElement('p');
+            text.innerText = 'Simple Example';
+            div.appendChild(text);
+            shadow.appendChild(style);
+            shadow.appendChild(div);
+        }   
+        }
+        
+        customElements.define('simple-example', SimpleExample);</code></pre>
+
+        <div class="outoutComponent">
+            <simple-exemple></simple-exemple>
+        </div>
+
+        <h2>Passando Parâmetros</h2>
+        <p>É possível passar parâmetros para um Web Component e acessá-los internamente, facilitando a criação de funcionalidades e ampliando as opções de desenvolvimento.</p>
+        <p>Para utilizar um parâmetro internamente, basta usar <code>this.getAttribute()</code> seguido do nome do parâmetro no método. No entanto, é importante notar que, dependendo da definição, o atributo pode tornar-se obrigatório para a criação do componente. Certifique-se de fornecer um valor padrão, se necessário.</p>
+        <pre><code class="language-html">&lt;!-- Exemplo no componente dentro do HTML --&gt;
+        &lt;my-portrait
+            mode="Circle"
+            url="https://images.unsplash.com/..."
+        &gt;&lt;/my-portrait&gt;
+        </code></pre>
+        <pre><code class="language-javascript">// Exemplo de como acessar o parâmetro em JavaScript
+        const option = this.getAttribute('mode');
+        </code></pre>
+        <div class="outoutComponent">
+            <my-portraid
+            mode="Circle"
+            url="https://images.unsplash.com/photo-1699401984740-3199cc4124bd?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            ></my-portraid>
+        </div>
+
+        <h2>Slots</h2>
+        <p>A tag <code>&lt;slot&gt;</code> permite a injeção de conteúdo externo no conteúdo encapsulado do Shadow DOM, possibilitando a criação de elementos e funcionalidades combinadas usando ambas as tecnologias.</p>
+        <pre><code class="language-html">&lt;!-- Exemplo no HTML --&gt;
+        &lt;my-header&gt;
+            &lt;a href="#"&gt;Link 1&lt;/a&gt;
+            &lt;a href="#"&gt;Link 2&lt;/a&gt;
+        &lt;/my-header&gt;
+        </code></pre>
+
+        <h2>Dificuldades</h2>
+        <p>Apesar da facilidade na definição de componentes, enfrento desafios com o encapsulamento e seus comportamentos. Criar componentes dinâmicos que sofrem alterações é complexo e a tecnologia possui sua própria especificidade.</p>
+        <p>Além disso, a criação apenas por <code>.appendChild()</code> parece ser trabalhosa e propensa a erros para projetos mais elaborados. Para o aprendizado inicial, foi uma escolha adequada, mas para projetos mais complexos, é necessário explorar métodos mais eficientes na construção dos elementos.</p>
+        
+        <h2>O que aprender</h2>
+        <p>Aqui estão algumas lições e aprendizados futuros que pretendo buscar:</p>
+        <ul>
+            <li>Compreender os comportamentos e dinâmicas do Shadow DOM e Componentes;</li>
+            <li>Explorar a criação de componentes através de APIs;</li>
+            <li>Adquirir técnicas para construção de conteúdos dinâmicos;</li>
+            <li>Conhecer boas práticas e ferramentas para trabalhar com Web Components.</li>
+        </ul>
+    </section>
+    <div class="padding"></div>
+</body>
+
+</html>
